@@ -20,15 +20,6 @@ class ArticleController extends Controller
         return ArticleResource::collection($articles);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -38,7 +29,12 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $article = new Article;
+        $article->title = $request->input('title');
+        $article->body = $request->input('body');
+        if($article->save()) {
+            return new ArticleResource($article);
+        }
     }
 
     /**
@@ -53,16 +49,6 @@ class ArticleController extends Controller
         return new ArticleResource($article);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -73,7 +59,12 @@ class ArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $article = Article::findOrFail($id);
+        $article->title = $request->input('title');
+        $article->body = $request->input('body');
+        if($article->save()) {
+            return new ArticleResource($article);
+        }
     }
 
     /**
@@ -84,6 +75,9 @@ class ArticleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $article = Article::findOrFail($id);
+        if($article->delete()){
+            return response()->json(null, 204);
+        }
     }
 }
