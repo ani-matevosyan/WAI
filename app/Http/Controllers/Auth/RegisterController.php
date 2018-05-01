@@ -72,7 +72,7 @@ class RegisterController extends Controller
         ]);
 
         $this->guard()->login($user);
-        $success['token'] = $user->createToken('MyApp')->accessToken;
+        $success['token'] = $user->createToken('WAI')->accessToken;
         $success['user'] = $user;
         return response()->json($success, 201);
     }

@@ -43,6 +43,7 @@ class LoginController extends Controller
 
     /**
      * Login a user.
+     * @param Request $request
      * @return response
      */
     public function login(Request $request)
@@ -51,7 +52,7 @@ class LoginController extends Controller
 
         if ($this->attemptLogin($request)) {
             $user = Auth::user();
-            $success['token'] = $user->createToken('MyApp')->accessToken;
+            $success['token'] = $user->createToken('WAI')->accessToken;
             $success['user'] = $user;
             return response()->json($success, 200);
         }

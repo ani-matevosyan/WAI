@@ -22,8 +22,8 @@ Route::group(['middleware' => 'auth:api'], function() {
     });
     Route::get('logout', 'Auth\LoginController@logout');
     Route::get('articles', 'ArticleController@index');
-    Route::get('article/{id}', 'ArticleController@show');
+    Route::get('article/{article}', 'ArticleController@show');
     Route::post('article', 'ArticleController@store');
-    Route::put('article/{id}', 'ArticleController@update');
-    Route::delete('article/{id}', 'ArticleController@destroy');
+    Route::put('article/{article}', 'ArticleController@update');
+    Route::delete('article/{article}', 'ArticleController@destroy');
 });

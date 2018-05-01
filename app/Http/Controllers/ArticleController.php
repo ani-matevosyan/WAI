@@ -20,6 +20,17 @@ class ArticleController extends Controller
         return ArticleResource::collection($articles);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  Article $article
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Article $article)
+    {
+        return new ArticleResource($article);
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -38,28 +49,14 @@ class ArticleController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $article = Article::findOrFail($id);
-        return new ArticleResource($article);
-    }
-
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Article $article
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Article $article)
     {
-        $article = Article::findOrFail($id);
         $article->title = $request->input('title');
         $article->body = $request->input('body');
         if($article->save()) {
@@ -70,12 +67,11 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Article $article
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Article $article)
     {
-        $article = Article::findOrFail($id);
         if($article->delete()){
             return response()->json(null, 204);
         }
