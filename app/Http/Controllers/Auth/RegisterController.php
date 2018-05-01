@@ -6,6 +6,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -55,17 +56,24 @@ class RegisterController extends Controller
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Register a new user.
      *
-     * @param  array  $data
-     * @return \App\User
+     * @param  Request $request
+     * @return response
      */
-    protected function create(array $data)
+    public function register(Request $request)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+        $this->validator($request->all())->validate();
+
+        $user = User::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => bcrypt($request['password']),
         ]);
+
+        $this->guard()->login($user);
+        $success['token'] = $user->createToken('MyApp')->accessToken;
+        $success['user'] = $user;
+        return response()->json($success, 201);
     }
 }
