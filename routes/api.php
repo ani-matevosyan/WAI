@@ -21,9 +21,6 @@ Route::group(['middleware' => 'auth:api'], function() {
         return $request->user();
     });
     Route::get('logout', 'Auth\LoginController@logout');
-    Route::get('articles', 'ArticleController@index');
-    Route::get('article/{article}', 'ArticleController@show');
-    Route::post('article', 'ArticleController@store');
-    Route::put('article/{article}', 'ArticleController@update');
-    Route::delete('article/{article}', 'ArticleController@destroy');
+
+    Route::apiResource('articles', 'ArticleController');
 });
