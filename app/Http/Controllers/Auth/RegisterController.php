@@ -56,22 +56,29 @@ class RegisterController extends Controller
     }
 
     /**
-     * Register a new user.
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return \App\User
+     */
+    protected function create(array $data)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+    }
+
+    /**
+     * Create an access token and return it with user info.
      *
      * @param  Request $request
      * @return response
      */
-    public function register(Request $request)
+    public function registered(Request $request)
     {
-        $this->validator($request->all())->validate();
-
-        $user = User::create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password' => bcrypt($request['password']),
-        ]);
-
-        $this->guard()->login($user);
+        $user = $this->guard()->user();
         $success['token'] = $user->createToken('WAI')->accessToken;
         $success['user'] = $user;
         return response()->json($success, 201);
