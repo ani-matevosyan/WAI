@@ -6,6 +6,7 @@ use App\Article;
 use App\Http\Resources\Article as ArticleResource;
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
@@ -43,6 +44,11 @@ class ArticleController extends Controller
         $article = new Article;
         $article->title = $request->input('title');
         $article->body = $request->input('body');
+        if($request->hasFile('image')){
+            $request->file('image')->store('images/articles');
+            $article->image = $request->file('image')->hashName();
+        }
+
         if($article->save()) {
             return new ArticleResource($article);
         }
@@ -59,6 +65,17 @@ class ArticleController extends Controller
     {
         $article->title = $request->input('title');
         $article->body = $request->input('body');
+        if($request->hasFile('image')){
+            if($article->image && Storage::exists('images/articles/'.$article->image)){
+                Storage::delete('images/articles/'.$article->image);
+            }
+            $request->file('image')->store('images/articles');
+            $article->image = $request->file('image')->hashName();
+
+        } elseif (Storage::exists('images/articles/'.$article->image)) {
+            Storage::delete('images/articles/'.$article->image);
+            $article->image = null;
+        }
         if($article->save()) {
             return new ArticleResource($article);
         }
@@ -72,6 +89,9 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        if($article->image && Storage::exists('images/articles/'.$article->image)){
+            Storage::delete('images/articles/'.$article->image);
+        }
         if($article->delete()){
             return response()->json(null, 204);
         }

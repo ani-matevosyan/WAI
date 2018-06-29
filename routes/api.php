@@ -23,4 +23,6 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('logout', 'Auth\LoginController@logout');
 
     Route::apiResource('articles', 'ArticleController');
+    Route::post('articles/{article}', 'ArticleController@update'); //todo delete this line
+
 });
