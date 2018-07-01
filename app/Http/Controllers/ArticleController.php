@@ -7,6 +7,9 @@ use App\Http\Resources\Article as ArticleResource;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\Article\StoreArticleRequest;
+use App\Http\Requests\Article\UpdateArticleRequest;
+use App\Http\Requests\Article\DestroyArticleRequest;
 
 class ArticleController extends Controller
 {
@@ -39,7 +42,7 @@ class ArticleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreArticleRequest $request)
     {
         $article = new Article;
         $article->title = $request->input('title');
@@ -61,7 +64,7 @@ class ArticleController extends Controller
      * @param  Article $article
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Article $article)
+    public function update(UpdateArticleRequest $request, Article $article)
     {
         $article->title = $request->input('title');
         $article->body = $request->input('body');
@@ -87,7 +90,7 @@ class ArticleController extends Controller
      * @param  Article $article
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Article $article)
+    public function destroy(DestroyArticleRequest $request, Article $article)
     {
         if($article->image && Storage::exists('images/articles/'.$article->image)){
             Storage::delete('images/articles/'.$article->image);
