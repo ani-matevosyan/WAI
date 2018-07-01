@@ -75,7 +75,7 @@ class ArticleController extends Controller
             $request->file('image')->store('images/articles');
             $article->image = $request->file('image')->hashName();
 
-        } elseif (Storage::exists('images/articles/'.$article->image)) {
+        } elseif ($article->image && Storage::exists('images/articles/'.$article->image)) {
             Storage::delete('images/articles/'.$article->image);
             $article->image = null;
         }
